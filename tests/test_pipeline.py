@@ -126,3 +126,9 @@ def test_held_quiz_and_items_stay_off_the_site(tmp_path, monkeypatch):
     html = wb.build("2026-11-18", tmp_path / "out").read_text()
     assert "medically assisted dying rules" not in html
     assert '"daily5": []' in html
+
+
+def test_quiet_day_publishes_nothing(tmproot):
+    (tmproot / "data/raw/sample.json").unlink()
+    rep = runmod.run("2026-11-21", offline=True, use_ai=False)
+    assert rep["new"] == [] and not (tmproot / "data/editions/2026-11-21.json").exists()

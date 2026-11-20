@@ -1,9 +1,12 @@
 name: Update site
 
 on:
-  schedule:
-    - cron: "*/30 12-23 * * 1-5"   # every 30 min, 7 a.m. to 7 p.m. Ottawa, weekdays
-    - cron: "15 */2 * * 0,6"       # every 2 hours on weekends
+  # Schedule is OFF until the live connectors are built (it would only publish
+  # empty days and use up free Actions minutes). To turn it on, delete the "#"
+  # in front of the three schedule lines below.
+  # schedule:
+  #   - cron: "*/30 12-23 * * 1-5"   # every 30 min, 7 a.m. to 7 p.m. Ottawa, weekdays
+  #   - cron: "15 */2 * * 0,6"       # every 2 hours on weekends
   workflow_dispatch: {}
 
 permissions:

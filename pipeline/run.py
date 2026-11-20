@@ -89,10 +89,13 @@ def run(date: str, offline: bool, use_ai: bool, since_days: int = 2, force_quiz:
             if item["review"] == "pending":
                 report["held"].append(item["id"])
 
+    ed_path = ROOT / "data/editions" / f"{date}.json"
+    if not report["new"] and not ed_path.exists():
+        return report  # nothing happened yet today: don't publish an empty edition
     published = [i for i in ed["items"] if i.get("review") in ("approved", "auto")]
     if report["new"] and len(ed.get("tldr") or []) < min(4, len(published)):
         ed["tldr"] = [i["short_title"].rstrip(".") + "." for i in published[:4]]
-    (ROOT / "data/editions" / f"{date}.json").write_text(json.dumps(ed, ensure_ascii=False, indent=1))
+    ed_path.write_text(json.dumps(ed, ensure_ascii=False, indent=1))
 
     # Evening: draft tomorrow's Daily Savvy (held for one-tap approval).
     tomorrow = (dt.date.fromisoformat(date) + dt.timedelta(days=1)).isoformat()
