@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PoliSavvy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f7f5f0; --card:#ffffff; --ink:#1d1b1a; --ink-2:#4a4744; --muted:#7a7570;
+    --line:#e4e0d8; --accent:#5b3f6b; --accent-soft:#efe9f2; --done:#1d1b1a; --good:#2f6b4f; --good-soft:#e6f1eb;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --paper:#141313; --card:#1e1c1c; --ink:#f2efe9; --ink-2:#c9c4bc; --muted:#8f8a83;
+      --line:#2f2c2b; --accent:#c9a8dc; --accent-soft:#2c2331; --done:#f2efe9; --good:#7cc4a0; --good-soft:#1c2b24; }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:680px;margin:0 auto;padding:0 18px 110px}
+  header{padding:24px 0 14px}
+  .brand span{color:var(--accent)}
+  .brand{font-family:"Source Serif 4",Georgia,serif;font-weight:700;font-size:28px;letter-spacing:-.01em;margin:0}
+  .tag{color:var(--ink-2);margin:4px 0 0;font-size:15px}
+  .edition{display:inline-block;margin-top:10px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:4px 10px;border-radius:999px}
+
+  .view{display:none}
+  .view.on{display:block;animation:fade .2s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+  .brief{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin:12px 0 4px}
+  .kicker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:700}
+  .brief ul{margin:0;padding-left:18px}
+  .brief li{margin:6px 0}
+
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:14px 0 4px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink-2);font:500 14px Inter,sans-serif;padding:8px 14px;border-radius:999px;cursor:pointer}
+  .chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+  .item{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin:14px 0}
+  .meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:8px}
+  .status{font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid var(--ink);color:var(--ink)}
+  .status.law{background:var(--ink);color:var(--paper)}
+  h3{font-family:"Source Serif 4",Georgia,serif;font-size:22px;line-height:1.25;margin:0 0 10px;font-weight:700}
+  .label{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:14px 0 4px}
+  .item p{margin:0;color:var(--ink-2)}
+  .you{background:var(--accent-soft);border-radius:12px;padding:12px 14px;margin-top:14px}
+  .you .label{margin-top:0;color:var(--accent)}
+  .you p{color:var(--ink)}
+
+  .track{display:flex;margin:18px 0 4px;padding:0;list-style:none}
+  .track li{flex:1;position:relative;text-align:center;font-size:11px;color:var(--muted);padding-top:18px;line-height:1.25}
+  .track li::before{content:"";position:absolute;top:4px;left:50%;transform:translateX(-50%);width:10px;height:10px;border-radius:50%;border:2px solid var(--line);background:var(--card);z-index:1}
+  .track li::after{content:"";position:absolute;top:9px;left:-50%;width:100%;height:2px;background:var(--line)}
+  .track li:first-child::after{display:none}
+  .track li.done::before{background:var(--done);border-color:var(--done)}
+  .track li.done::after,.track li.now::after{background:var(--done)}
+  .track li.now::before{border-color:var(--accent);background:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+  .track li.now{color:var(--accent);font-weight:700}
+  .track li.done{color:var(--ink-2)}
+
+  details{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+  summary{cursor:pointer;font-weight:600;font-size:14px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";font-size:20px;color:var(--muted);font-weight:400}
+  details[open] summary::after{content:"\2212"}
+  .sides{display:grid;gap:10px;margin-top:10px}
+  .side{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-size:15px;color:var(--ink-2)}
+  .side b{display:block;color:var(--ink);font-size:13px}
+  .note{font-size:12px;color:var(--muted);margin-top:8px}
+
+  .poll{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+  .poll .q{font-weight:700;font-size:14px;margin-bottom:8px}
+  .poll .opts{display:flex;gap:8px}
+  .poll button{flex:1;padding:10px 6px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:600 14px Inter,sans-serif;cursor:pointer}
+  .poll button.picked{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .poll .reveal{display:none;margin-top:10px;background:var(--good-soft);border-radius:10px;padding:10px 12px;font-size:14px;color:var(--ink)}
+  .poll.answered .reveal{display:block}
+
+  .src{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:14px;font-weight:600;color:var(--accent);text-decoration:none}
+  .src:hover{text-decoration:underline}
+  .term{background:none;border:0;padding:0;font:inherit;color:inherit;border-bottom:1.5px dotted var(--accent);cursor:help}
+
+  .small{display:flex;gap:12px;align-items:baseline;font-size:15px;color:var(--ink-2)}
+  h2.section{font-family:"Source Serif 4",Georgia,serif;font-size:20px;margin:26px 0 6px}
+
+  /* PM timeline */
+  .tl{list-style:none;margin:8px 0 0;padding:0;position:relative}
+  .tl::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--line)}
+  .tl li{position:relative;padding:0 0 18px 28px}
+  .tl li::before{content:"";position:absolute;left:1px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--card);border:2px solid var(--ink)}
+  .tl li.now::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+  .tl li.next::before{border-style:dashed;border-color:var(--muted)}
+  .tl .when{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+  .tl .where{font-weight:700}
+  .tl .what{color:var(--ink-2);font-size:15px}
+
+  /* Lobbying */
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .stat{background:var(--paper);border-radius:12px;padding:12px 14px}
+  .stat .n{font-size:28px;font-weight:800;letter-spacing:-.02em}
+  .stat .d{font-size:13px;color:var(--ink-2);line-height:1.35}
+  .bars{margin-top:8px;display:grid;gap:8px}
+  .bar{display:grid;grid-template-columns:130px 1fr 48px;align-items:center;gap:10px;font-size:14px}
+  .bar .t{height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+  .bar .f{height:100%;background:var(--accent);border-radius:5px}
+  .bar .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+  .meet{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:10px}
+  .meet .who{font-weight:700}
+  .meet .with{font-size:14px;color:var(--ink-2);margin-top:4px}
+  .pill{display:inline-block;font-size:12px;padding:2px 8px;border-radius:999px;background:var(--paper);border:1px solid var(--line);margin:6px 4px 0 0;color:var(--ink-2)}
+
+  /* Learn */
+  .quiz .qq{display:none}
+  .quiz .qq.on{display:block}
+  .quiz .qtext{font-weight:700;font-size:17px;margin:6px 0 12px}
+  .quiz .ans{display:grid;gap:8px}
+  .quiz .ans button{text-align:left;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:500 15px Inter,sans-serif;cursor:pointer}
+  .quiz .ans button.right{background:var(--good-soft);border-color:var(--good);color:var(--ink)}
+  .quiz .ans button.wrong{opacity:.55;text-decoration:line-through}
+  .quiz .why{display:none;margin-top:10px;font-size:14px;color:var(--ink-2)}
+  .quiz .qq.done .why{display:block}
+  .quiz .nav{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:13px;color:var(--muted)}
+  .btn{padding:10px 16px;border-radius:10px;border:0;background:var(--ink);color:var(--paper);font:600 14px Inter,sans-serif;cursor:pointer}
+  .btn:disabled{opacity:.35;cursor:default}
+  .meter{height:10px;background:var(--line);border-radius:5px;overflow:hidden;margin-top:10px}
+  .meter i{display:block;height:100%;width:0;background:var(--good);transition:width .3s}
+  .glossary{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .glossary button{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:500 14px Inter,sans-serif;cursor:pointer}
+  .glossary button.seen{border-color:var(--good);background:var(--good-soft)}
+  .how ol{padding-left:20px;color:var(--ink-2);margin:6px 0 0}
+  .how li{margin:6px 0}
+  .cta{display:block;text-align:center;margin-top:12px;padding:13px;border-radius:12px;background:var(--accent);color:#fff;font-weight:700;text-decoration:none}
+  @media (prefers-color-scheme: dark){ .cta{color:#1e1c1c} }
+
+  footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+
+  /* bottom tabs */
+  .tabs{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;z-index:5;padding-bottom:env(safe-area-inset-bottom)}
+  .tabs .in{display:flex;width:100%;max-width:680px}
+  .tabs a{flex:1;text-align:center;padding:10px 4px 12px;font-size:12px;font-weight:600;color:var(--muted);text-decoration:none}
+  .tabs a svg{display:block;margin:0 auto 3px;width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .tabs a.on{color:var(--accent)}
+
+  .sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:flex-end;justify-content:center;z-index:10}
+  .sheet-bg.open{display:flex}
+  .sheet{background:var(--card);width:100%;max-width:680px;border-radius:18px 18px 0 0;padding:22px 22px 30px}
+  .sheet h4{margin:0 0 6px;font-family:"Source Serif 4",Georgia,serif;font-size:20px}
+  .sheet p{margin:0;color:var(--ink-2)}
+  .sheet button{margin-top:16px;width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:600 15px Inter,sans-serif;cursor:pointer}
+
+  /* account / follow */
+  .follow{margin-left:auto;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:600 12px Inter,sans-serif;padding:5px 10px;border-radius:999px;cursor:pointer}
+  .follow.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .steps{display:flex;gap:6px;margin:4px 0 14px}
+  .steps i{flex:1;height:4px;border-radius:2px;background:var(--line)}
+  .steps i.on{background:var(--accent)}
+  .field{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:500 16px Inter,sans-serif}
+  .topics{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .topics button{padding:9px 13px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:500 14px Inter,sans-serif;cursor:pointer}
+  .topics button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .radio{display:grid;gap:8px;margin-top:6px}
+  .radio label{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:12px;cursor:pointer;background:var(--paper)}
+  .radio label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+  .radio small{display:block;color:var(--muted);font-size:13px}
+  .check{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--ink-2);margin-top:14px}
+  .row{display:flex;gap:10px;margin-top:16px}
+  .row .btn{flex:1;padding:13px}
+  .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .err{color:#b3402f;font-size:13px;margin-top:6px;min-height:1em}
+  .mail{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:12px}
+  .mail .hd{background:var(--paper);padding:10px 14px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line)}
+  .mail .bd{padding:14px}
+  .mail .bd h4{font-family:"Source Serif 4",Georgia,serif;font-size:19px;margin:0 0 8px}
+  .mail .it{padding:10px 0;border-top:1px solid var(--line)}
+  .mail .it:first-of-type{border-top:0}
+  .mail .it b{display:block}
+  .mail .it span{font-size:14px;color:var(--ink-2)}
+  .mail .tg{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);margin-bottom:2px}
+  .demo{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+  .toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:999px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}
+  .toast.show{opacity:1}
+
+  /* daily 5 */
+  .d5head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .d5head h3{margin:2px 0 0}
+  .streak{flex:none;text-align:center;background:var(--paper);border-radius:12px;padding:8px 12px;min-width:64px}
+  .streak b{display:block;font-size:22px;line-height:1.1}
+  .streak span{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+  .dots{display:flex;gap:6px;margin:14px 0 4px}
+  .dots i{flex:1;height:6px;border-radius:3px;background:var(--line)}
+  .dots i.ok{background:var(--good)} .dots i.no{background:#c0563f} .dots i.cur{background:var(--accent)}
+  .qtype{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:3px 8px;border-radius:6px;margin-top:8px}
+  .hl{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .hl button{padding:20px 10px!important;text-align:center!important;font-size:17px!important;font-weight:700!important}
+  .order-pick{display:flex;flex-wrap:wrap;gap:8px;min-height:44px;padding:8px;border:1px dashed var(--line);border-radius:12px;margin-bottom:10px}
+  .order-pick span{background:var(--ink);color:var(--paper);border-radius:999px;padding:6px 12px;font-size:14px;font-weight:600}
+  .order-pick em{color:var(--muted);font-size:14px;font-style:normal;padding:6px 4px}
+  .linkish{background:none;border:0;color:var(--accent);font:600 14px Inter,sans-serif;cursor:pointer;padding:0}
+  .result{text-align:center;padding:6px 0 2px}
+  .result .big{font-family:"Source Serif 4",Georgia,serif;font-size:34px;font-weight:700}
+  .result .grid{font-size:28px;letter-spacing:4px;margin:6px 0}
+  .result .sub{color:var(--ink-2)}
+  .sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0 6px;text-align:center}
+  .sgrid b{display:block;font-size:22px}
+  .sgrid span{font-size:11px;color:var(--muted);line-height:1.2;display:block}
+  .dist{display:grid;gap:5px;margin-top:6px}
+  .dist div{display:grid;grid-template-columns:16px 1fr;gap:8px;align-items:center;font-size:13px}
+  .dist i{display:block;height:18px;border-radius:4px;background:var(--line);color:var(--ink);font-style:normal;font-size:12px;font-weight:700;text-align:right;padding-right:6px;line-height:18px;min-width:22px}
+  .dist i.me{background:var(--good);color:#fff}
+  .countdown{font-variant-numeric:tabular-nums;font-weight:700}
+  .banner{display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;background:var(--ink);color:var(--paper);border-radius:16px;padding:16px 18px;margin:12px 0 4px}
+  .banner .t{flex:1}
+  .banner b{display:block;font-size:16px}
+  .banner small{opacity:.75;font-size:13px}
+  .banner .go{background:var(--paper);color:var(--ink);font-weight:700;font-size:14px;padding:8px 14px;border-radius:999px}
+  .switch{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:14px}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1 class="brand">Poli<span>Savvy</span></h1>
+  <p class="tag">Politics, minus the spin. What Canada's federal government did, explained like a normal person would, with every item linked to the official record.</p>
+  <span class="edition">{{ edition_label }}</span>
+</header>
+
+<!-- ============ TODAY ============ -->
+<section class="view" id="v-today">
+  <a class="banner" href="#daily" id="banner"></a>
+  {%- if ed.tldr %}
+  <div class="brief">
+    <p class="kicker">TL;DR</p>
+    <ul>
+      {%- for line in ed.tldr %}
+      <li>{{ line }}</li>
+      {%- endfor %}
+    </ul>
+  </div>
+  {%- endif %}
+
+  <nav class="chips" aria-label="Filter">
+    <button class="chip" aria-pressed="true" data-f="all">All</button>
+    <button class="chip" aria-pressed="false" data-f="law">Became law</button>
+    <button class="chip" aria-pressed="false" data-f="vote">Votes</button>
+    <button class="chip" aria-pressed="false" data-f="debate">Being debated</button>
+  </nav>
+
+  <div id="feed">
+  {%- for it in ed["items"] %}
+  <article class="item" data-kind="{{ it.kind }}" data-topics="{{ it.topics|join(',') }}" data-bill="{{ it.bill }}" data-title="{{ it.short_title }}">
+    <div class="meta"><span class="status{% if it.kind == 'law' %} law{% endif %}">{{ it.status }}</span><span>{% if it.bill.startswith(('C-','S-')) %}Bill {% endif %}{{ it.bill }} · {{ it.category }}</span><button class="follow">+ Follow</button></div>
+    <h3>{{ it.headline }}</h3>
+    <div class="label">{{ it.what_label }}</div>
+    <p>{{ it.what|rich }}</p>
+    {%- if it.stage %}
+    <ol class="track" aria-label="Progress">
+      {%- for st in stages %}
+      <li class="{% if loop.index <= it.stage.done %}done{% elif it.stage.current and loop.index == it.stage.done + 1 %}now{% endif %}">{{ st }}</li>
+      {%- endfor %}
+    </ol>
+    {%- endif %}
+    <div class="you">
+      <div class="label">{{ it.you_label }}</div>
+      <p>{{ it.you|rich }}</p>
+    </div>
+    {%- if it.sides %}
+    <details>
+      <summary>What each side says</summary>
+      <div class="sides">
+        {%- for sd in it.sides %}
+        <div class="side"><b>{{ sd.who }}</b>{{ sd.text }}</div>
+        {%- endfor %}
+      </div>
+      {%- if it.sides_note %}
+      <p class="note">{{ it.sides_note|rich }}</p>
+      {%- endif %}
+    </details>
+    {%- endif %}
+    {%- if it.poll %}
+    <div class="poll" data-id="{{ it.id }}">
+      <div class="q">{{ it.poll.q }}</div>
+      <div class="opts"><button>Yes</button><button>No</button><button>Not sure</button></div>
+      <div class="reveal">{{ it.poll.reveal|rich }}</div>
+    </div>
+    {%- endif %}
+    <a class="src" href="{{ it.source.url }}" target="_blank" rel="noopener">{{ it.source.label }} →</a>
+  </article>
+  {%- endfor %}
+  {%- if ed.also_law %}
+  <div class="item" data-kind="law">
+    <p class="kicker">Also became law</p>
+    {%- for a in ed.also_law %}
+    <div class="small"><span class="status law">Law</span><span><b>{{ a.title }}</b> (Bill {{ a.bill }}). {{ a.text }}</span></div>
+    {%- endfor %}
+  </div>
+  {%- endif %}
+  </div>
+</section>
+
+<!-- ============ PM ============ -->
+<section class="view" id="v-pm">
+  {%- if ed.pm %}
+  <div class="item">
+    <div class="meta"><span class="status">This week</span><span>Prime Minister {{ ed.pm.name }}</span></div>
+    <h3>{{ ed.pm.headline }}</h3>
+    <p>{{ ed.pm.intro }}</p>
+    <div class="label">Where he's been</div>
+    <ol class="tl">
+      {%- for t in ed.pm.timeline %}
+      <li class="{{ 'now' if t.state == 'now' else ('next' if t.state == 'next' else '') }}"><div class="when">{{ t.when }}</div><div class="where">{{ t.where }}</div><div class="what">{{ t.what }}</div></li>
+      {%- endfor %}
+    </ol>
+    {%- if ed.pm.good_to_know %}
+    <div class="you">
+      <div class="label">Good to know</div>
+      <p>{{ ed.pm.good_to_know|rich }}</p>
+    </div>
+    {%- endif %}
+    <a class="src" href="{{ ed.pm.source.url }}" target="_blank" rel="noopener">{{ ed.pm.source.label }} →</a>
+  </div>
+  {%- endif %}
+  <div class="item">
+    <p class="kicker">How to read the PM's schedule</p>
+    <p>The Prime Minister's Office posts a schedule every day. Some events say <b>"Closed to media"</b> or just <b>"Private meetings"</b>, which means the public isn't told who he met. Meetings with registered lobbyists still get reported, a few weeks later, in the Lobbying tab.</p>
+  </div>
+</section>
+
+<!-- ============ LOBBYING ============ -->
+<section class="view" id="v-lobby">
+  {%- set lb = ed.lobbying %}
+  {%- if lb %}
+  <div class="item">
+    <div class="meta"><span class="status">{{ lb.month }}</span><span>Registry of Lobbyists</span></div>
+    <h3>{{ lb.headline }}</h3>
+    <p>Every time a paid lobbyist has an arranged meeting with a senior federal official, it has to be reported. Here's what last month looked like.</p>
+    <div class="stats">
+      <div class="stat"><div class="n">{{ "{:,}".format(lb.total) }}</div><div class="d">reported lobbying meetings in {{ lb.month.split(' ')[0] }}</div></div>
+      <div class="stat"><div class="n">{{ "{:,}".format(lb.prev_total) }}</div><div class="d">{{ lb.prev_label }}</div></div>
+    </div>
+    <div class="label">What they wanted to talk about</div>
+    <div class="bars" id="bars"></div>
+    <p class="note">One meeting can cover several topics.</p>
+  </div>
+
+  <div class="item">
+    <p class="kicker">Most-lobbied office</p>
+    <h3>{{ lb.top_office }}</h3>
+    <p>In the latest monthly count, this office got more lobbying reports than any other part of government.</p>
+    <div class="label">Reports by month</div>
+    <div class="bars" id="pmo"></div>
+  </div>
+
+  <div class="item">
+    <p class="kicker">Example from the registry</p>
+    {%- for ex in lb.examples %}
+    <div class="meet">
+      <div class="who">{{ ex.who }}</div>
+      <div class="with">{{ ex.with }}</div>
+      {% for sj in ex.subjects %}<span class="pill">{{ sj }}</span>{% endfor %}
+    </div>
+    {%- endfor %}
+    <div class="you">
+      <div class="label">Keep in mind</div>
+      <p>Lobbying is legal and regulated. Companies, unions, charities and advocacy groups all do it. A meeting shows who got access, not that they got what they wanted.</p>
+    </div>
+    <a class="src" href="{{ lb.source.url }}" target="_blank" rel="noopener">{{ lb.source.label }} →</a>
+  </div>
+  {%- endif %}
+</section>
+
+<!-- ============ LEARN ============ -->
+<section class="view" id="v-learn">
+  <div class="item quiz" id="d5"></div>
+
+  <div class="item">
+    <p class="kicker">Your civics meter</p>
+    <h3 id="meter-t">Let's get started</h3>
+    <div class="meter"><i id="meter"></i></div>
+    <p class="note" id="meter-d">Play the Daily Savvy, learn terms and share your takes to fill it up.</p>
+  </div>
+
+  <div class="item">
+    <p class="kicker">Words you'll see a lot</p>
+    <p>Tap one to learn it.</p>
+    <div class="glossary" id="gloss"></div>
+  </div>
+
+  <div class="item how">
+    <p class="kicker">How a bill becomes law</p>
+    <ol>
+      <li><b>Introduced.</b> An MP or senator tables the bill.</li>
+      <li><b>First vote.</b> MPs debate the general idea and vote. Officially called "second reading."</li>
+      <li><b>Committee.</b> A small group of MPs studies it line by line and can change it.</li>
+      <li><b>Final vote.</b> The whole House votes on the finished bill. Officially "third reading."</li>
+      <li><b>Senate.</b> The Senate goes through the same steps.</li>
+      <li><b>Law.</b> The Governor General signs it ("Royal Assent").</li>
+    </ol>
+  </div>
+
+  <div class="item">
+    <p class="kicker">Your vote counts</p>
+    <h3>Make sure you're ready to vote</h3>
+    <p>With a minority government, an election can come sooner than planned, like if a budget vote fails. Elections Canada lets you check or update your registration online in a few minutes.</p>
+    <a class="cta" href="https://www.elections.ca/" target="_blank" rel="noopener">Go to Elections Canada</a>
+  </div>
+</section>
+
+
+<!-- ============ YOU ============ -->
+<section class="view" id="v-you">
+  <div class="item" id="signup">
+    <p class="kicker">Make it yours</p>
+    <h3>Get the news you actually care about</h3>
+    <p>Pick your topics and we'll email you what Parliament did about them. No spam, no party affiliation, unsubscribe anytime.</p>
+    <div class="steps" style="margin-top:16px"><i></i><i></i><i></i><i></i></div>
+
+    <div class="step" data-s="0">
+      <div class="label">Your email</div>
+      <input class="field" id="email" type="email" placeholder="you@example.com" autocomplete="email">
+      <p class="note">We'll send a one-tap sign-in link. No password to remember.</p>
+      <div class="err" id="err0"></div>
+      <div class="row"><button class="btn" data-next>Continue</button></div>
+    </div>
+
+    <div class="step" data-s="1">
+      <div class="label">What do you care about?</div>
+      <p class="note" style="margin:0 0 6px">Pick at least one.</p>
+      <div class="topics" id="topics"></div>
+      <div class="err" id="err1"></div>
+      <div class="row"><button class="btn ghost" data-back>Back</button><button class="btn" data-next>Continue</button></div>
+    </div>
+
+    <div class="step" data-s="2">
+      <div class="label">How often?</div>
+      <div class="radio">
+        <label><input type="radio" name="freq" value="weekly" checked><span><b>Weekly digest</b><small>Sunday morning, about a 3-minute read</small></span></label>
+        <label><input type="radio" name="freq" value="daily"><span><b>Daily</b><small>A short email on days something happens in your topics</small></span></label>
+        <label><input type="radio" name="freq" value="alerts"><span><b>Only alerts</b><small>Just when a bill you follow moves to its next step</small></span></label>
+      </div>
+      <label class="check"><input type="checkbox" id="alerts" checked> Also alert me when a bill I follow moves to its next step</label>
+      <div class="row"><button class="btn ghost" data-back>Back</button><button class="btn" data-next>Continue</button></div>
+    </div>
+
+    <div class="step" data-s="3">
+      <div class="label">Almost done</div>
+      <label class="check"><input type="checkbox" id="consent"> Yes, email me PoliSavvy updates on my chosen topics. I can unsubscribe anytime from any email.</label>
+      <p class="note">We never sell your data or share it with parties, campaigns or advertisers. Your topics and takes are never shown publicly.</p>
+      <div class="err" id="err3"></div>
+      <div class="row"><button class="btn ghost" data-back>Back</button><button class="btn" data-next>Create my account</button></div>
+    </div>
+    <p class="demo">Demo only: nothing is sent and your details stay on this device.</p>
+  </div>
+
+  <div id="account" hidden>
+    <div class="item">
+      <p class="kicker">Your account</p>
+      <h3 id="hi">You're in</h3>
+      <div class="label">Your topics</div>
+      <div class="topics" id="mytopics"></div>
+      <div class="label">Bills you follow</div>
+      <div id="myfollows"></div>
+      <div class="label">Email</div>
+      <p id="myfreq"></p>
+    </div>
+    <div class="item">
+      <p class="kicker">Preview of your next email</p>
+      <div class="mail">
+        <div class="hd" id="mailhd"></div>
+        <div class="bd" id="mailbd"></div>
+      </div>
+    </div>
+    <div class="row"><button class="btn ghost" id="reset">Start over (demo)</button></div>
+  </div>
+</section>
+
+<footer>
+  Edition for {{ long_date }}, built from public records: LEGISinfo, House of Commons votes, the Prime Minister's itinerary and the Registry of Lobbyists. Party positions describe what was said in the House and are not endorsements or fact checks. Your takes, quiz answers and demo account stay on your device.
+</footer>
+</div>
+
+<nav class="tabs" aria-label="Sections"><div class="in">
+  <a href="#today" data-v="today"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>Today</a>
+  <a href="#pm" data-v="pm"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10M19 21V10M9 21V10M15 21V10M2 10l10-6 10 6z"/></svg>The PM</a>
+  <a href="#lobbying" data-v="lobby"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Lobbying</a>
+  <a href="#daily" data-v="learn"><svg viewBox="0 0 24 24"><path d="M3 8l9-4 9 4-9 4-9-4z"/><path d="M7 10v5c2 2 8 2 10 0v-5"/></svg>Daily Savvy</a>
+  <a href="#you" data-v="you"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1-4 4-6 7-6s6 2 7 6"/></svg>For you</a>
+</div></nav>
+<div class="toast" id="toast"></div>
+
+<div class="sheet-bg" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-t">
+  <div class="sheet"><h4 id="sheet-t"></h4><p id="sheet-p"></p><button id="sheet-close">Got it</button></div>
+</div>
+
+<script>
+const PP = {{ payload|tojson }};
+/* ---------- tiny local store (per device) ---------- */
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem("pp:"+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem("pp:"+k, JSON.stringify(v)); }catch(e){} }
+};
+const state = { terms: store.get("terms", []), polls: store.get("polls", {}) };
+
+/* ---------- glossary ---------- */
+const terms = PP.glossary;
+const sheet = document.getElementById("sheet");
+function openTerm(key){
+  const t = terms[key]; if(!t) return;
+  document.getElementById("sheet-t").textContent = t[0];
+  document.getElementById("sheet-p").textContent = t[1];
+  sheet.classList.add("open");
+  if(!state.terms.includes(key)){ state.terms.push(key); store.set("terms", state.terms); }
+  renderGloss(); renderMeter();
+}
+document.querySelectorAll(".term").forEach(b => b.addEventListener("click", e => { e.preventDefault(); openTerm(b.dataset.term); }));
+document.getElementById("sheet-close").onclick = () => sheet.classList.remove("open");
+sheet.addEventListener("click", e => { if(e.target === sheet) sheet.classList.remove("open"); });
+
+const gloss = document.getElementById("gloss");
+function renderGloss(){
+  gloss.innerHTML = "";
+  Object.keys(terms).forEach(k => {
+    const b = document.createElement("button");
+    b.textContent = terms[k][0];
+    if(state.terms.includes(k)) b.classList.add("seen");
+    b.onclick = () => openTerm(k);
+    gloss.appendChild(b);
+  });
+}
+
+/* ---------- filters ---------- */
+document.querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => {
+  document.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === c));
+  const f = c.dataset.f;
+  document.querySelectorAll("#feed [data-kind]").forEach(el => { el.hidden = !(f === "all" || el.dataset.kind === f); });
+}));
+
+/* ---------- polls ---------- */
+document.querySelectorAll(".poll").forEach(p => {
+  const id = p.dataset.id, btns = p.querySelectorAll("button");
+  function show(i){ btns.forEach((b,j) => b.classList.toggle("picked", j === i)); p.classList.add("answered"); }
+  if(state.polls[id] !== undefined) show(state.polls[id]);
+  btns.forEach((b,i) => b.addEventListener("click", () => { state.polls[id] = i; store.set("polls", state.polls); show(i); renderMeter(); }));
+});
+
+/* ---------- lobbying bars ---------- */
+function bars(el, rows){
+  const max = Math.max(...rows.map(r => r[1]));
+  el.innerHTML = rows.map(r => `<div class="bar"><span>${r[0]}</span><div class="t"><div class="f" style="width:${(r[1]/max*100).toFixed(1)}%"></div></div><span class="v">${r[1].toLocaleString()}</span></div>`).join("");
+}
+if(PP.lobbying){ bars(document.getElementById("bars"), PP.lobbying.topics);
+bars(document.getElementById("pmo"), PP.lobbying.top_office_series); }
+
+/* ---------- the Daily Savvy ---------- */
+const LAUNCH = new Date(PP.launch + "T00:00:00");           // day #1 of the game
+const RESET_HOUR = 6;                            // new quiz at 6 a.m. local
+function gameDate(d = new Date()){ const x = new Date(d.getTime() - RESET_HOUR*3600e3); return new Date(x.getFullYear(), x.getMonth(), x.getDate()); }
+function key(d){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+const TODAY = new Date(PP.quiz_date + "T00:00:00"), TODAY_KEY = PP.quiz_date;
+const GAME_NO = Math.round((TODAY - LAUNCH) / 864e5) + 1;
+
+const DQ = PP.daily5;
+
+let day = store.get("d5:"+TODAY_KEY, {res:[], done:false});
+let stats = store.get("d5stats", {played:0, dist:[0,0,0,0,0,0], streak:0, max:0, last:null, freezes:0, used:0});
+let remind = store.get("d5remind", false);
+const d5 = document.getElementById("d5");
+const shuffle = arr => arr.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+
+function header(){
+  return `<div class="d5head"><div><p class="kicker" style="margin:0">The Daily Savvy · #${GAME_NO}</p><h3>${day.done ? "Done for today" : "What happened in Ottawa?"}</h3></div>
+    <div class="streak"><b>\u{1F525} ${stats.streak}</b><span>streak</span></div></div>
+    <div class="dots">${DQ.map((_,i)=>`<i class="${day.res[i]===true?"ok":day.res[i]===false?"no":i===day.res.length&&!day.done?"cur":""}"></i>`).join("")}</div>`;
+}
+
+function renderD5(){
+  if(!DQ.length){ d5.innerHTML = `<p class="kicker">The Daily Savvy</p><h3>Today's Daily Savvy is on its way</h3><p>Check back soon.</p>`; return; }
+  if(day.done) return renderResult();
+  const i = day.res.length, q = DQ[i];
+  let body;
+  if(q.order){
+    body = `<div class="order-pick" id="op"><em>Tap below in order</em></div><div class="ans" id="oa">${shuffle(q.order).map(t=>`<button>${t}</button>`).join("")}</div>
+            <div class="nav"><button class="linkish" id="undo">Undo</button><span>${i+1} of ${DQ.length}</span></div>`;
+  } else {
+    body = `<div class="ans ${q.hl?"hl":""}">${q.opts.map((o,k)=>`<button data-k="${k}">${o}</button>`).join("")}</div><div class="nav"><span></span><span>${i+1} of ${DQ.length}</span></div>`;
+  }
+  d5.innerHTML = header() + `<span class="qtype">${q.type}</span><div class="qtext">${q.q}</div>${body}<div class="why" id="why"></div>`;
+  d5.classList.remove("done");
+  if(q.order){
+    const picked = [], op = d5.querySelector("#op");
+    const draw = () => { op.innerHTML = picked.length ? picked.map((t,n)=>`<span>${n+1}. ${t}</span>`).join("") : "<em>Tap below in order</em>"; };
+    d5.querySelectorAll("#oa button").forEach(b => b.onclick = () => {
+      picked.push(b.textContent); b.disabled = true; b.style.opacity=.35; draw();
+      if(picked.length === q.order.length){ const ok = picked.every((t,n)=>t===q.order[n]); answer(ok); }
+    });
+    d5.querySelector("#undo").onclick = () => { const t = picked.pop(); d5.querySelectorAll("#oa button").forEach(b=>{ if(b.textContent===t){ b.disabled=false; b.style.opacity=1; } }); draw(); };
+  } else {
+    d5.querySelectorAll(".ans button").forEach(b => b.onclick = () => {
+      const k = +b.dataset.k, ok = k === q.a;
+      d5.querySelectorAll(".ans button").forEach((x,j)=>{ x.disabled=true; if(j===q.a) x.classList.add("right"); else if(j===k) x.classList.add("wrong"); });
+      answer(ok);
+    });
+  }
+}
+
+function answer(ok){
+  const i = day.res.length, q = DQ[i];
+  day.res.push(ok); store.set("d5:"+TODAY_KEY, day);
+  const last = i === DQ.length-1;
+  const why = d5.querySelector("#why");
+  why.innerHTML = `<b>${ok?"Correct.":"Not quite."}</b> ${q.why} <a class="src" style="margin:6px 0 0;display:inline-flex" href="${q.link}">Read the story →</a>
+    <div class="row"><button class="btn" id="nx">${last?"See results":"Next"}</button></div>`;
+  d5.classList.add("done"); why.style.display="block";
+  d5.querySelector(".dots").innerHTML = DQ.map((_,j)=>`<i class="${day.res[j]===true?"ok":day.res[j]===false?"no":""}"></i>`).join("");
+  d5.querySelector("#nx").onclick = () => { if(last) finish(); else renderD5(); };
+  renderMeter();
+}
+
+function finish(){
+  if(!day.done){
+    const score = day.res.filter(Boolean).length;
+    const prev = stats.last ? new Date(stats.last+"T00:00:00") : null;
+    const gap = prev ? Math.round((TODAY - prev)/864e5) : null;
+    if(gap === 1) stats.streak += 1;
+    else if(gap === 2 && stats.freezes > 0){ stats.freezes -= 1; stats.used += 1; stats.streak += 1; day.froze = true; }
+    else if(gap !== 0) stats.streak = 1;
+    if(stats.streak > 0 && stats.streak % 7 === 0 && stats.freezes < 2) { stats.freezes += 1; day.earned = true; }
+    stats.max = Math.max(stats.max, stats.streak);
+    stats.played += 1; stats.dist[score] += 1; stats.last = TODAY_KEY;
+    day.done = true; day.score = score;
+    store.set("d5stats", stats); store.set("d5:"+TODAY_KEY, day);
+  }
+  renderResult(); renderBanner();
+}
+
+function grid(){ return day.res.map(r => r ? "\u{1F7E9}" : "\u{1F7E5}").join(""); }
+function shareText(){ return `PoliSavvy Daily #${GAME_NO} · ${day.score}/5\n${grid()}\n\u{1F525} ${stats.streak}-day streak`; }
+function nextReset(){ const n = new Date(); const r = new Date(n.getFullYear(), n.getMonth(), n.getDate(), RESET_HOUR); if(r <= n) r.setDate(r.getDate()+1); return r; }
+function fmt(ms){ const t=Math.max(0,Math.floor(ms/1000)); return [Math.floor(t/3600), Math.floor(t%3600/60), t%60].map(v=>String(v).padStart(2,"0")).join(":"); }
+
+function renderResult(){
+  const avg = stats.played ? (stats.dist.reduce((a,c,k)=>a+c*k,0)/stats.played).toFixed(1) : "0";
+  const maxd = Math.max(1, ...stats.dist);
+  const msg = ["Rough day in Ottawa. Tomorrow's yours.","Good start. Read the Today tab and come back tomorrow.","Not bad at all.","Solid. You're paying attention.","So close to perfect.","Perfect score. You actually follow this stuff."][day.score];
+  d5.classList.add("done");
+  d5.innerHTML = header() + `
+    <div class="result"><div class="big">${day.score}/5</div><div class="grid">${grid()}</div><div class="sub">${msg}</div>
+      ${day.froze ? `<p class="note">A streak freeze saved your streak.</p>` : ""}${day.earned ? `<p class="note">7 days in a row: you earned a streak freeze.</p>` : ""}</div>
+    <div class="row"><button class="btn" id="share">Copy result to share</button></div>
+    <div class="sgrid"><div><b>${stats.played}</b><span>played</span></div><div><b>${avg}</b><span>avg score</span></div><div><b>${stats.streak}</b><span>current streak</span></div><div><b>${stats.max}</b><span>best streak</span></div></div>
+    <div class="label">Your scores</div>
+    <div class="dist">${[5,4,3,2,1,0].map(k=>`<div><span>${k}</span><i class="${k===day.score?"me":""}" style="width:${Math.max(8,stats.dist[k]/maxd*100)}%">${stats.dist[k]}</i></div>`).join("")}</div>
+    <p class="note" style="margin-top:10px">❄️ Streak freezes: ${stats.freezes} of 2. Earn one every 7 days in a row. It covers you if you miss a day.</p>
+    <div class="switch"><span>Next Daily Savvy in <span class="countdown" id="cd"></span></span></div>
+    <label class="switch"><span>Remind me every morning</span><input type="checkbox" id="rm" ${remind?"checked":""}></label>
+    <p class="demo"><button class="linkish" id="replay">Replay today (demo)</button></p>`;
+  d5.querySelector("#share").onclick = () => copy(shareText());
+  d5.querySelector("#rm").onchange = e => { remind = e.target.checked; store.set("d5remind", remind);
+    toast(remind ? (acct ? "We'll remind you at 7 a.m." : "Create an account in For you to get reminders") : "Reminders off"); };
+  d5.querySelector("#replay").onclick = () => {
+    if(day.done){ stats.played--; stats.dist[day.score]--; store.set("d5stats", stats); }
+    day = {res:[], done:false}; store.set("d5:"+TODAY_KEY, day); renderD5(); renderBanner(); renderMeter();
+  };
+  const tick = () => { const el = document.getElementById("cd"); if(el) el.textContent = fmt(nextReset() - new Date()); };
+  tick(); clearInterval(window._cd); window._cd = setInterval(tick, 1000);
+}
+
+function renderBanner(){
+  const b = document.getElementById("banner");
+  if(!DQ.length){ b.hidden = true; return; }
+  b.innerHTML = day.done
+    ? `<div class="t"><b>Daily Savvy #${GAME_NO}: ${day.score}/5 ${grid()}</b><small>\u{1F525} ${stats.streak}-day streak · new quiz at 6 a.m.</small></div><span class="go">Stats</span>`
+    : `<div class="t"><b>The Daily Savvy #${GAME_NO}</b><small>5 questions, 2 minutes${stats.streak?` · keep your \u{1F525} ${stats.streak}-day streak`:""}</small></div><span class="go">Play</span>`;
+}
+renderD5(); renderBanner();
+
+/* ---------- civics meter ---------- */
+function renderMeter(){
+  const total = Object.keys(terms).length + DQ.length + document.querySelectorAll(".poll").length;
+  const got = state.terms.length + day.res.length + Object.keys(state.polls).length;
+  const pct = Math.round(got / total * 100);
+  document.getElementById("meter").style.width = pct + "%";
+  const lvl = pct >= 100 ? "Policy nerd" : pct >= 60 ? "Informed voter" : pct >= 25 ? "Getting the hang of it" : "Let's get started";
+  document.getElementById("meter-t").textContent = lvl;
+  document.getElementById("meter-d").textContent = `${pct}% this week · ${state.terms.length} terms learned · ${Object.keys(state.polls).length} takes shared`;
+}
+renderGloss(); renderMeter();
+
+
+/* ---------- toast + copy ---------- */
+function toast(m){ const t=document.getElementById("toast"); t.textContent=m; t.classList.add("show"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),1800); }
+function copy(text){
+  try{ navigator.clipboard.writeText(text).then(()=>toast("Copied. Paste it anywhere."), ()=>toast("Couldn't copy on this device")); }
+  catch(e){ toast("Couldn't copy on this device"); }
+}
+
+/* ---------- account (demo, stored on this device) ---------- */
+const TOPICS = PP.topics;
+const EXTRA = PP.extras;
+let acct = store.get("acct", null);
+let follows = store.get("follows", []);
+let draft = {email:"", topics:[], freq:"weekly", alerts:true};
+let step = 0;
+
+const topicsEl = document.getElementById("topics");
+Object.entries(TOPICS).forEach(([k,v]) => {
+  const b=document.createElement("button"); b.textContent=v; b.dataset.k=k;
+  b.onclick=()=>{ b.classList.toggle("on"); draft.topics = [...topicsEl.querySelectorAll(".on")].map(x=>x.dataset.k); };
+  topicsEl.appendChild(b);
+});
+function showStep(){
+  document.querySelectorAll("#signup .step").forEach(el => el.hidden = +el.dataset.s !== step);
+  document.querySelectorAll("#signup .steps i").forEach((el,i)=> el.classList.toggle("on", i<=step));
+}
+document.querySelectorAll("#signup [data-back]").forEach(b=>b.onclick=()=>{ step--; showStep(); });
+document.querySelectorAll("#signup [data-next]").forEach(b=>b.onclick=()=>{
+  if(step===0){ const e=document.getElementById("email").value.trim(); if(!/^\S+@\S+\.\S+$/.test(e)){ document.getElementById("err0").textContent="Enter a valid email."; return; } draft.email=e; document.getElementById("err0").textContent=""; }
+  if(step===1){ if(!draft.topics.length){ document.getElementById("err1").textContent="Pick at least one topic."; return; } document.getElementById("err1").textContent=""; }
+  if(step===2){ draft.freq=document.querySelector('input[name="freq"]:checked').value; draft.alerts=document.getElementById("alerts").checked; }
+  if(step===3){ if(!document.getElementById("consent").checked){ document.getElementById("err3").textContent="Tick the box so we're allowed to email you."; return; } acct={...draft}; store.set("acct",acct); renderAccount(); toast("Account created"); return; }
+  step++; showStep();
+});
+
+function billItems(){ return [...document.querySelectorAll("#feed article[data-bill]")].map(a=>({el:a, bill:a.dataset.bill, title:a.dataset.title, topics:a.dataset.topics.split(","), tag:a.querySelector(".status").textContent})); }
+
+function renderAccount(){
+  const signed = !!acct;
+  document.getElementById("signup").hidden = signed;
+  document.getElementById("account").hidden = !signed;
+  document.querySelectorAll(".follow").forEach(b=>{ const bill=b.closest("article").dataset.bill; const on=follows.includes(bill); b.classList.toggle("on",on); b.textContent = on ? "Following" : "+ Follow"; });
+  if(!signed){ showStep(); return; }
+  document.getElementById("hi").textContent = "You're in, " + acct.email.split("@")[0];
+  const mt=document.getElementById("mytopics"); mt.innerHTML="";
+  Object.entries(TOPICS).forEach(([k,v])=>{ const b=document.createElement("button"); b.textContent=v; if(acct.topics.includes(k)) b.classList.add("on");
+    b.onclick=()=>{ acct.topics = acct.topics.includes(k) ? acct.topics.filter(x=>x!==k) : [...acct.topics,k]; store.set("acct",acct); renderAccount(); }; mt.appendChild(b); });
+  const items = billItems();
+  document.getElementById("myfollows").innerHTML = follows.length
+    ? follows.map(f=>{ const it=items.find(i=>i.bill===f); return `<div class="meet"><div class="who">${f}</div><div class="with">${it?it.title:""}</div></div>`; }).join("")
+    : `<p class="note">Tap "+ Follow" on any bill in the Today tab to get an alert when it moves.</p>`;
+  const fl={weekly:"Weekly digest, Sunday morning", daily:"Daily, on days with news in your topics", alerts:"Only alerts for bills you follow"}[acct.freq];
+  document.getElementById("myfreq").textContent = fl + (acct.alerts && acct.freq!=="alerts" ? ", plus alerts for bills you follow." : ".") + " Sent to " + acct.email + ".";
+  // email preview
+  const pick = t => t.some(x=>acct.topics.includes(x));
+  const rows = [...items.filter(i=>pick(i.topics)||follows.includes(i.bill)).map(i=>({tag:(follows.includes(i.bill)?"Following · ":"")+i.bill, title:i.title, text:i.el.querySelector(".you p").textContent})),
+                ...EXTRA.filter(e=>pick(e.topics)).map(e=>({tag:e.tag,title:e.title,text:e.text}))];
+  const names = acct.topics.map(k=>TOPICS[k]);
+  document.getElementById("mailhd").innerHTML = `From: PoliSavvy<br>Subject: Your week in Ottawa: ${names.slice(0,2).join(", ")}${names.length>2?" and more":""}`;
+  document.getElementById("mailbd").innerHTML = `<h4>Here's what Parliament did on what you care about</h4>` +
+    (rows.length ? rows.map(r=>`<div class="it"><span class="tg">${r.tag}</span><b>${r.title}</b><span>${r.text}</span></div>`).join("")
+                 : `<p class="note">Nothing new on your topics this week. Quiet weeks happen.</p>`) +
+    `<p class="note" style="margin-top:12px">Play today's Daily Savvy · Manage topics · Unsubscribe</p>`;
+}
+document.querySelectorAll(".follow").forEach(b=>b.addEventListener("click",()=>{
+  if(!acct){ toast("Create a free account to follow bills"); location.hash="#you"; return; }
+  const bill=b.closest("article").dataset.bill;
+  follows = follows.includes(bill) ? follows.filter(x=>x!==bill) : [...follows,bill]; store.set("follows",follows);
+  renderAccount(); toast(follows.includes(bill) ? `Following ${bill}. We'll email you when it moves.` : `Unfollowed ${bill}`);
+}));
+document.getElementById("reset").onclick=()=>{ acct=null; follows=[]; store.set("acct",null); store.set("follows",[]); step=0; draft={email:"",topics:[],freq:"weekly",alerts:true}; topicsEl.querySelectorAll(".on").forEach(x=>x.classList.remove("on")); document.getElementById("consent").checked=false; renderAccount(); };
+renderAccount();
+
+/* ---------- tabs ---------- */
+const views = { today:"today", pm:"pm", lobbying:"lobby", learn:"learn", daily:"learn", you:"you" };
+function route(){
+  const h = (location.hash || "#today").slice(1); const v = views[h] || "today";
+  document.querySelectorAll(".view").forEach(s => s.classList.toggle("on", s.id === "v-" + v));
+  document.querySelectorAll(".tabs a").forEach(a => a.classList.toggle("on", a.dataset.v === v));
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", route); route();
+</script>
+</body>
+</html>

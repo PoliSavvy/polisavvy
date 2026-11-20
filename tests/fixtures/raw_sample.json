@@ -1,0 +1,8 @@
+[
+  {"id": "vote-45-1-999", "source": "house_votes", "url": "https://www.ourcommons.ca/Members/en/votes/45/1/999",
+   "date": "2026-11-19", "official_title": "3rd reading and adoption of Bill C-268, Spectrum Policy Framework for Canada Act",
+   "text": "Agreed To. Yeas 330, Nays 0.", "kind_hint": "vote", "bill": "C-268", "result": "Passed a vote"},
+  {"id": "c-35-first-reading", "source": "legisinfo", "url": "https://www.parl.ca/legisinfo/en/bill/45-1/C-35",
+   "date": "2026-11-19", "official_title": "An Act respecting a ban on importing goods made with forced labour",
+   "text": "First reading in the House of Commons.", "kind_hint": "debate", "bill": "C-35"}
+]

@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-18",
+  "review": "approved",
+  "questions": [
+    {"type": "Passed or failed?", "q": "Bill C-41, which changes the rules for medically assisted dying, faced its first big vote in the House. What happened?",
+     "opts": ["Passed", "Failed"], "a": 0, "hl": true, "why": "It passed and now goes to committee for detailed study.", "link": "#today"},
+    {"type": "Higher or lower", "q": "There were 3,839 reported lobbying meetings in September. Was October higher or lower?",
+     "opts": ["Higher", "Lower"], "a": 0, "hl": true, "why": "Much higher: 6,356, a 66% jump in the weeks before the budget.", "link": "#lobbying"},
+    {"type": "Put it in order", "q": "Tap these steps in the order a bill goes through them.",
+     "order": ["First vote", "Committee", "Senate", "Royal Assent"], "why": "First vote (second reading), committee study, Senate review, then Royal Assent makes it law.", "link": "#daily"},
+    {"type": "Which bill is this?", "q": "“Keeps the federal tax on fuel off until the end of January 2027.”",
+     "opts": ["C-41", "C-38", "C-268", "S-210"], "a": 1, "why": "C-38, the Canadian Fuel Affordability Act. The tax returns at half rate in February and in full in April 2027.", "link": "#today"},
+    {"type": "Where in the world?", "q": "Where did Prime Minister Carney meet China's President Xi Jinping this week?",
+     "opts": ["Beijing", "Manila", "Shenzhen", "Dublin"], "a": 2, "why": "Shenzhen, at the APEC summit. It was the last stop of a four-country trip.", "link": "#pm"}
+  ]
+}

@@ -1,0 +1,7 @@
+dist/
+__pycache__/
+*.pyc
+.env
+run-report.json
+review.md
+result.txt

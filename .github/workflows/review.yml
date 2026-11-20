@@ -1,0 +1,48 @@
+name: Review from a comment
+
+# Reply to the "Review needed" issue with /approve all, /approve c-41 quiz,
+# or /reject c-41. Only the repository owner's comments are acted on.
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  issues: write
+  pages: write
+  id-token: write
+
+jobs:
+  review:
+    if: >
+      github.event.comment.author_association == 'OWNER' &&
+      contains(github.event.issue.labels.*.name, 'review') &&
+      (startsWith(github.event.comment.body, '/approve') || startsWith(github.event.comment.body, '/reject'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r requirements.txt
+      - name: Apply decision
+        env:
+          COMMENT: ${{ github.event.comment.body }}
+        run: python -m pipeline.review comment "$COMMENT" | tee result.txt
+      - name: Commit and reply
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "polisavvy-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data
+          git diff --cached --quiet || git commit -m "Review: $(head -c 60 result.txt | tr '\n' ' ')"
+          git push
+          gh issue comment ${{ github.event.issue.number }} --body-file result.txt
+          python -m pipeline.review issue > review.md
+          if [ -s review.md ]; then gh issue edit ${{ github.event.issue.number }} --body-file review.md
+          else gh issue close ${{ github.event.issue.number }} --comment "All caught up. Site updated."; fi
+
+  deploy:
+    needs: review
+    uses: ./.github/workflows/deploy.yml

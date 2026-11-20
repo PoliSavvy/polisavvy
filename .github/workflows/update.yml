@@ -1,0 +1,55 @@
+name: Update site
+
+on:
+  schedule:
+    - cron: "*/30 12-23 * * 1-5"   # every 30 min, 7 a.m. to 7 p.m. Ottawa, weekdays
+    - cron: "15 */2 * * 0,6"       # every 2 hours on weekends
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  issues: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: site-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r requirements.txt
+
+      - name: Fetch and summarize
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python -m pipeline.run | tee run-report.json
+
+      - name: Commit data
+        run: |
+          git config user.name "polisavvy-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data
+          git diff --cached --quiet || git commit -m "Update edition $(date -u +%F' '%H:%M)"
+          git push
+
+      - name: Open or update the review issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python -m pipeline.review issue > review.md
+          if [ -s review.md ]; then
+            gh label create review --color 5b3f6b --force >/dev/null
+            n=$(gh issue list --label review --state open --json number -q '.[0].number')
+            if [ -n "$n" ]; then gh issue edit "$n" --body-file review.md
+            else gh issue create --title "Review needed" --label review --body-file review.md; fi
+          fi
+
+  deploy:
+    needs: update
+    uses: ./.github/workflows/deploy.yml
