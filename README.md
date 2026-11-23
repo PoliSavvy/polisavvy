@@ -57,7 +57,10 @@ python -m pipeline.review list              # see what's waiting for review
 | Data format and validation | Done |
 | AI summarizer, neutrality checks, sensitivity rules | Done, tested with a fake model |
 | Review by issue comment | Done |
-| Scheduled updates and deploy | Done, needs setup (docs/SETUP.md) |
-| Live connectors | Next: need live access to the government sites to build against real responses |
+| Scheduled updates and deploy | On: every 30 min on weekdays, every 2 h on weekends; deploys only when data changes |
+| Live: LEGISinfo bills, House votes (with party breakdown) | Done, tested against saved real responses. Writes items only once ANTHROPIC_API_KEY is set |
+| Live: PM itinerary | Done. PM tab is copied from the official itinerary, no AI |
+| Lobbying registry | Blocked: lobbycanada.gc.ca refuses automated downloads (Cloudflare check). Tab shows the last saved month |
+| Canada Gazette | Reachable, not built: regulation titles need a plain-language step |
 | Accounts, emails, quiz stats server | Phase 2 |
 | Riding map, MP report cards, French | Phase 3 |

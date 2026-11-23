@@ -49,7 +49,9 @@ def _prompt(raw: dict, feedback: list[str] | None = None) -> str:
         "Write one PoliSavvy item from this official record. Use only facts in the record.\n\n"
         f"RECORD:\n{json.dumps(raw, ensure_ascii=False, indent=1)}\n\n"
         f"Return only a JSON object with exactly these fields:\n{json.dumps(ITEM_SHAPE, indent=1)}\n"
-        "Use stage null if this is not a bill. Use poll null if a yes/no question makes no sense."
+        "Use stage null if this is not a bill. Use poll null if a yes/no question makes no sense.\n"
+        "If the record has party_votes, sides may say how each party's MPs voted (for, against, split), "
+        "in words, without numbers. Never invent a party's reasons."
     )
     if feedback:
         msg += "\n\nYour previous draft broke these rules. Fix them:\n- " + "\n- ".join(feedback)

@@ -1,10 +1,10 @@
 """Connectors for official Canadian sources.
 
-STATUS: the fixture connector works today. The live connectors are stubs
-until the build environment can reach the government sites (see
-docs/SETUP.md, step 2). Each stub lists the endpoint to verify. Parsers are
-written against real responses only, never guessed, so a wrong guess can
-never put a wrong fact on the site.
+Live: LEGISinfo bills, House of Commons recorded votes, PM itinerary.
+Pending: Lobbying (the registry site blocks automated downloads behind a
+Cloudflare check) and Canada Gazette (reachable, but needs a plain-language
+step before it is useful). Parsers live in live.py and are tested against
+saved real responses, never guessed.
 """
 from __future__ import annotations
 
@@ -12,6 +12,21 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+UA = "PoliSavvyBot/0.1 (+https://github.com/PoliSavvy/polisavvy)"
+
+
+def get(url: str, timeout: int = 40) -> str:
+    import requests
+    last = None
+    for _ in range(2):
+        try:
+            r = requests.get(url, timeout=timeout, headers={"User-Agent": UA})
+            r.raise_for_status()
+            r.encoding = r.encoding or "utf-8"
+            return r.text
+        except Exception as e:  # one retry, then give up for this run
+            last = e
+    raise last
 
 
 class FixtureConnector:
@@ -41,34 +56,46 @@ class _Pending:
         )
 
 
-class LegisInfo(_Pending):
+class LegisInfo:
     name = "legisinfo"
-    endpoint = "https://www.parl.ca/legisinfo/en/bills/json?parlsession=45-1 (bill list with latest stage)"
-    notes = "Emit a record when a bill's latest completed stage changes. Cadence: every 30 min on sitting days."
+    endpoint = "https://www.parl.ca/legisinfo/en/bills/json?parlsession=45-1"
+
+    def fetch(self, since: str) -> list[dict]:
+        from .live import PARL, parse_bills
+        return parse_bills(get(self.endpoint), since,
+                           details=lambda code: get(f"https://www.parl.ca/legisinfo/en/bill/{PARL}/{code.lower()}/json"))
 
 
-class HouseVotes(_Pending):
+class HouseVotes:
     name = "house_votes"
-    endpoint = "https://www.ourcommons.ca/Members/en/votes/xml (recorded divisions with yea/nay totals)"
-    notes = "Emit one record per new division number, with result and tally. Cadence: every 30 min on sitting days."
+    endpoint = "https://www.ourcommons.ca/Members/en/votes/xml"
+
+    def fetch(self, since: str) -> list[dict]:
+        from .live import parse_votes, vote_url
+        return parse_votes(get(self.endpoint), since, participants=lambda n: get(vote_url(n) + "/xml"))
 
 
-class PMItinerary(_Pending):
+class PMItinerary:
+    """Feeds the PM tab (run.refresh_pm), not the item feed."""
     name = "pm_itinerary"
-    endpoint = "https://www.pm.gc.ca/en/news/itineraries (daily itinerary pages)"
-    notes = "Feeds the PM tab timeline, not the bill feed. Cadence: hourly."
+    endpoint = "https://www.pm.gc.ca/en/news.rss"
+
+    def days(self) -> list[dict]:
+        from .live import parse_itinerary
+        return parse_itinerary(get(self.endpoint))
 
 
 class Lobbying(_Pending):
     name = "lobbying"
     endpoint = "https://lobbycanada.gc.ca/media/mqbbmaqk/communications_ocl_cal.zip (monthly communication reports, CSV)"
-    notes = "Aggregate by month, subject and institution for the Lobbying tab. Cadence: daily (data updates weekly)."
+    notes = "Blocked: the site answers automated requests with a Cloudflare challenge (HTTP 403). Aggregate by month, subject and institution for the Lobbying tab. Cadence: daily (data updates weekly)."
 
 
 class CanadaGazette(_Pending):
     name = "gazette"
     endpoint = "https://gazette.gc.ca (Part I and Part II tables of contents)"
-    notes = "Regulations and royal assent notices. Cadence: daily."
+    notes = "Reachable via https://gazette.gc.ca/rss/p2-eng.xml. Needs a plain-language pass before regulation titles are readable. Cadence: every second Wednesday."
 
 
-LIVE = [LegisInfo(), HouseVotes(), PMItinerary(), Lobbying(), CanadaGazette()]
+LIVE = [LegisInfo(), HouseVotes(), Lobbying(), CanadaGazette()]  # item feed sources
+PM = PMItinerary()

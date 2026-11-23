@@ -16,7 +16,8 @@ import os
 from pathlib import Path
 
 from .connectors.base import check
-from .connectors.sources import LIVE, FixtureConnector
+from .connectors.live import merge_bill_votes, pm_section
+from .connectors.sources import LIVE, PM, FixtureConnector
 
 ROOT = Path(__file__).resolve().parent.parent
 TZ_OFFSET = dt.timedelta(hours=-5)  # Ottawa standard time; good enough for picking the edition date
@@ -62,36 +63,46 @@ def run(date: str, offline: bool, use_ai: bool, since_days: int = 2, force_quiz:
         summarizer = Summarizer()
 
     report = {"new": [], "held": [], "skipped": [], "errors": []}
+    pm_changed = False if offline else refresh_pm(ed, date, report)
+    if not offline and summarizer is None and use_ai:
+        report["skipped"].append("bills and votes: no ANTHROPIC_API_KEY yet, so nothing is written up")
+        connectors = []
+    records = []
     for c in connectors:
         try:
-            records = c.fetch(since)
+            records += c.fetch(since)
         except NotImplementedError as e:
             report["skipped"].append(str(e))
-            continue
         except Exception as e:  # one broken source must never stop the others
             report["errors"].append(f"{c.name}: {e}")
+    for raw in merge_bill_votes(records):
+        if raw["id"] in have:
             continue
-        for raw in records:
-            if raw["id"] in have:
-                continue
-            bad = check(raw)
-            if bad:
-                report["errors"].append(f"{c.name}/{raw.get('id')}: {bad}")
-                continue
-            try:
-                item = summarizer.summarize(raw) if summarizer else fact_only(raw)
-            except Exception as e:
-                report["errors"].append(f"summarize {raw['id']}: {e}")
-                item = fact_only(raw)
-            ed["items"].append(item)
-            have.add(item["id"])
-            report["new"].append(item["id"])
-            if item["review"] == "pending":
-                report["held"].append(item["id"])
+        bad = check(raw)
+        if bad:
+            report["errors"].append(f"{raw.get('source')}/{raw.get('id')}: {bad}")
+            continue
+        try:
+            item = summarizer.summarize(raw) if summarizer else fact_only(raw)
+        except Exception as e:
+            report["errors"].append(f"summarize {raw['id']}: {e}")
+            item = fact_only(raw)
+        ed["items"].append(item)
+        have.add(item["id"])
+        report["new"].append(item["id"])
+        if item["review"] == "pending":
+            report["held"].append(item["id"])
 
     ed_path = ROOT / "data/editions" / f"{date}.json"
     if not report["new"] and not ed_path.exists():
-        return report  # nothing happened yet today: don't publish an empty edition
+        # Nothing new in Parliament yet today: don't publish an empty edition.
+        # A fresh PM schedule still goes onto the latest edition.
+        prev = sorted((ROOT / "data/editions").glob("*.json"))
+        if pm_changed and prev:
+            last = json.loads(prev[-1].read_text())
+            last["pm"] = ed["pm"]
+            prev[-1].write_text(json.dumps(last, ensure_ascii=False, indent=1))
+        return report
     published = [i for i in ed["items"] if i.get("review") in ("approved", "auto")]
     if report["new"] and len(ed.get("tldr") or []) < min(4, len(published)):
         ed["tldr"] = [i["short_title"].rstrip(".") + "." for i in published[:4]]
@@ -109,6 +120,24 @@ def run(date: str, offline: bool, use_ai: bool, since_days: int = 2, force_quiz:
         except Exception as e:
             report["errors"].append(f"daily5: {e}")
     return report
+
+
+def refresh_pm(ed: dict, date: str, report: dict) -> bool:
+    """Rebuild the PM tab from the official itinerary. Returns True if it changed."""
+    try:
+        days = PM.days()
+    except Exception as e:
+        report["errors"].append(f"pm_itinerary: {e}")
+        return False
+    if not days:
+        return False
+    name = (ed.get("pm") or {}).get("name") or "Mark Carney"
+    new = pm_section(days, date, name)
+    if (ed.get("pm") or {}).get("timeline") == new["timeline"]:
+        return False
+    ed["pm"] = new
+    report["new_pm"] = new["updated_from"]
+    return True
 
 
 def recent_items(date: str, days: int = 7) -> list[dict]:

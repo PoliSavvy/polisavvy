@@ -132,3 +132,50 @@ def test_quiet_day_publishes_nothing(tmproot):
     (tmproot / "data/raw/sample.json").unlink()
     rep = runmod.run("2026-11-21", offline=True, use_ai=False)
     assert rep["new"] == [] and not (tmproot / "data/editions/2026-11-21.json").exists()
+
+
+# ---------------- live parsers, tested against saved real responses ----------------
+LIVE_FIX = FIX / "live"
+
+
+def test_legisinfo_parser_keeps_latest_stage_and_skips_noise():
+    from pipeline.connectors.live import parse_bills
+    recs = parse_bills((LIVE_FIX / "bills.json").read_text(), "2026-11-17",
+                       details=lambda code: (LIVE_FIX / "bill_c-42.json").read_text() if code == "C-42" else "[]")
+    ids = {r["id"] for r in recs}
+    assert "c-10-royal-assent" in ids and "c-10-senate-3rd-reading" not in ids  # latest stage only
+    assert "c-296-house-1st-reading" not in ids  # non-government first reading skipped
+    assert not any(r["bill"] == "S-1" for r in recs)  # pro forma skipped
+    c42 = next(r for r in recs if r["bill"] == "C-42")
+    assert c42["id"] == "c-42-house-2nd-reading" and "Groceries and Essentials Benefit" in c42["text"]
+    assert "50%" in c42["text"] and "—" not in c42["text"]
+    from pipeline.connectors.base import check
+    assert all(check(r) == [] for r in recs)
+
+
+def test_votes_parser_skips_amendments_and_folds_into_bill():
+    from pipeline.connectors.live import merge_bill_votes, parse_bills, parse_votes
+    votes = parse_votes((LIVE_FIX / "votes.xml").read_text(), "2026-11-17",
+                        participants=lambda n: (LIVE_FIX / "vote_196.xml").read_text())
+    subjects = [v["official_title"] for v in votes]
+    assert not any("amendment)" in s for s in subjects)
+    v196 = next(v for v in votes if v["id"] == "vote-45-1-196")
+    assert v196["tally"] == {"yeas": 162, "nays": 151} and v196["result"] == "Passed a vote"
+    assert v196["party_votes"]["Liberal"]["Yea"] > 0 and v196["url"].endswith("/votes/45/1/196")
+    bills = parse_bills((LIVE_FIX / "bills.json").read_text(), "2026-11-17")
+    merged = merge_bill_votes(bills + votes)
+    c41 = next(r for r in merged if r.get("bill") == "C-41")
+    assert c41["source"] == "legisinfo" and "tally" in c41
+    assert not any(r["source"] == "house_votes" and r.get("bill") == "C-41" for r in merged)
+
+
+def test_pm_itinerary_is_copied_not_rewritten():
+    from pipeline.connectors.live import parse_itinerary, pm_section
+    days = parse_itinerary((LIVE_FIX / "pm_news.rss").read_text())
+    assert [d["date"] for d in days] == ["2026-11-18", "2026-11-19", "2026-11-21"]
+    pm = pm_section(days, "2026-11-21", "Mark Carney")
+    nov19 = [t for t in pm["timeline"] if t["when"].startswith("Nov 19")]
+    assert nov19[0]["when"] == "Nov 19 · 8:55 a.m." and "APEC" in nov19[0]["what"]
+    assert nov19[-1]["where"].startswith("National Capital Region")
+    assert pm["timeline"][-1]["state"] == "now"
+    assert all("Note for media" not in t["what"] for t in pm["timeline"])
