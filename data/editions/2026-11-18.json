@@ -1,145 +1,363 @@
 {
-  "date": "2026-11-18",
-  "tldr": [
-    "The 2026 budget is being debated. If MPs vote it down, it could trigger an election.",
-    "A bill changing the rules for medically assisted dying passed its first big vote.",
-    "The gas tax break is law until early 2027.",
-    "The PM is in China for the APEC summit and is due back in Ottawa on Nov 19."
-  ],
-  "items": [
+ "date": "2026-11-18",
+ "tldr": [
+  "The 2026 budget is being debated. If MPs vote it down, it could trigger an election.",
+  "A bill changing the rules for medically assisted dying passed its first big vote.",
+  "The gas tax break is law until early 2027.",
+  "The PM is in China for the APEC summit and is due back in Ottawa on Nov 19."
+ ],
+ "items": [
+  {
+   "id": "budget-2026",
+   "kind": "debate",
+   "status": "Being debated",
+   "bill": "Budget 2026",
+   "category": "Money",
+   "topics": [
+    "cost",
+    "housing",
+    "health",
+    "economy"
+   ],
+   "headline": "The 2026 budget is out. MPs are debating it before a vote.",
+   "short_title": "The 2026 budget is being debated before a confidence vote",
+   "what_label": "What happened",
+   "what": "The Finance Minister presented the government's yearly spending and tax plan on November 5. The House is now debating it. One proposed change to the budget motion has already been voted down.",
+   "stage": null,
+   "you_label": "Why it matters",
+   "you": "The budget sets what Ottawa spends on things like housing and health care. The final budget vote is a [[confidence|confidence vote]]: if it fails, it could trigger an election.",
+   "sides": [
     {
-      "id": "budget-2026",
-      "kind": "debate",
-      "status": "Being debated",
-      "bill": "Budget 2026",
-      "category": "Money",
-      "topics": ["cost", "housing", "health", "economy"],
-      "headline": "The 2026 budget is out. MPs are debating it before a vote.",
-      "short_title": "The 2026 budget is being debated before a confidence vote",
-      "what_label": "What happened",
-      "what": "The Finance Minister presented the government's yearly spending and tax plan on November 5. The House is now debating it. One proposed change to the budget motion has already been voted down.",
-      "stage": null,
-      "you_label": "Why it matters",
-      "you": "The budget sets what Ottawa spends on things like housing and health care. The final budget vote is a [[confidence|confidence vote]]: if it fails, it could trigger an election.",
-      "sides": [
-        {"who": "Liberals (government)", "text": "Calls it a plan to grow the economy and attract investment, including funding aimed at ending homelessness within 10 years."},
-        {"who": "Conservatives", "text": "Say it adds too much debt, pointing to $765 billion in new debt over five years."},
-        {"who": "Bloc Québécois", "text": "Object that it slows the growth of health care money sent to provinces, from 5% to 3% a year starting in 2028."},
-        {"who": "NDP and Greens", "text": "Raised concerns about spending on fossil fuels and benefits for corporations."}
-      ],
-      "sides_note": "Listed in order of seats held. These are what each party said in the House, not checked facts.",
-      "poll": {"q": "Your take: would you vote for this budget?", "reveal": "**What actually happens:** the final vote hasn't happened yet. Check back here to see how it goes."},
-      "source": {"label": "See the official votes record", "url": "https://www.ourcommons.ca/Members/en/votes/"},
-      "sensitive": false,
-      "review": "approved"
+     "who": "Liberals (government)",
+     "text": "Calls it a plan to grow the economy and attract investment, including funding aimed at ending homelessness within 10 years."
     },
     {
-      "id": "c-41",
-      "kind": "vote",
-      "status": "Passed a vote",
-      "bill": "C-41",
-      "category": "Health",
-      "topics": ["health", "justice"],
-      "headline": "MPs back changes to medically assisted dying rules, moving the bill to committee",
-      "short_title": "Assisted dying bill passes first vote, heads to committee",
-      "what_label": "What it does",
-      "what": "It would permanently rule out medical assistance in dying when a mental illness is the only condition. It would also let people with illnesses that may later take away their ability to decide make a request in advance, in provinces that set up a system for it.",
-      "stage": {"done": 2, "current": true},
-      "you_label": "What happens next",
-      "you": "A small group of MPs will study the bill in detail and can suggest changes. Nothing has changed in the law yet.",
-      "sides": [
-        {"who": "Supporters (government)", "text": "Say it adds safeguards, including independent medical assessments and the ability to withdraw consent."},
-        {"who": "Critics (Bloc Québécois)", "text": "Doubt the bill would hold up in court as written and say it could be more restrictive than current rules."}
-      ],
-      "sides_note": "Before the vote, the government used [[time-allocation|time allocation]] to limit how long debate could run.",
-      "poll": {"q": "Your take: should this bill move forward?", "reveal": "**What actually happened:** MPs voted to move it forward. It's now in committee."},
-      "source": {"label": "Read the bill on LEGISinfo", "url": "https://www.parl.ca/legisinfo/en/bill/45-1/C-41"},
-      "sensitive": true,
-      "review": "approved"
+     "who": "Conservatives",
+     "text": "Say it adds too much debt, pointing to $765 billion in new debt over five years."
     },
     {
-      "id": "c-38",
-      "kind": "law",
-      "status": "Became law",
-      "bill": "C-38",
-      "category": "Cost of living",
-      "topics": ["cost", "climate"],
-      "headline": "The federal gas tax break is extended into 2027",
-      "short_title": "Gas tax break is law until early 2027",
-      "what_label": "What it does",
-      "what": "The federal excise tax on fuel stays off until the end of January 2027. It comes back at half rate in February and March, then returns in full in April 2027.",
-      "stage": {"done": 6, "current": false},
-      "you_label": "What it means for you",
-      "you": "You keep paying less federal tax at the pump through winter. Expect prices to step up in February and again in April 2027.",
-      "sides": [
-        {"who": "Supporters (government)", "text": "Call it temporary relief while global fuel prices are high."},
-        {"who": "Critics (Conservatives)", "text": "Call it a half-measure, since the tax comes back in 2027, and want it cut for good."}
-      ],
-      "sides_note": null,
-      "poll": {"q": "Your take: good idea?", "reveal": "**What actually happened:** it passed both the House and Senate and became law in late October."},
-      "source": {"label": "Read the bill on LEGISinfo", "url": "https://www.parl.ca/legisinfo/en/bill/45-1/C-38"},
-      "sensitive": false,
-      "review": "approved"
+     "who": "Bloc Québécois",
+     "text": "Object that it slows the growth of health care money sent to provinces, from 5% to 3% a year starting in 2028."
     },
     {
-      "id": "c-268",
-      "kind": "debate",
-      "status": "Being debated",
-      "bill": "C-268",
-      "category": "Phones and internet",
-      "topics": ["tech"],
-      "headline": "A bill to make cell coverage maps more accurate nears its final House vote",
-      "short_title": "Cell coverage map bill nears final House vote",
-      "what_label": "What it does",
-      "what": "It would require checks on the mobile coverage data that providers report, plus regular reviews of how Canada manages wireless airwaves.",
-      "stage": {"done": 3, "current": true},
-      "you_label": "Why it matters",
-      "you": "Coverage maps decide where money goes to fix weak service, so accurate data matters most in rural areas.",
-      "sides": [
-        {"who": "All parties", "text": "MPs who spoke in debate supported it. No party has come out against it."}
-      ],
-      "sides_note": "This is a [[pmb|private member's bill]], not a government bill.",
-      "poll": {"q": "Your take: should it pass?", "reveal": "**What actually happens:** the final House vote is still to come. With support from every party, it's likely to pass."},
-      "source": {"label": "Read the bill on LEGISinfo", "url": "https://www.parl.ca/legisinfo/en/bill/45-1/C-268"},
-      "sensitive": false,
-      "review": "approved"
+     "who": "NDP and Greens",
+     "text": "Raised concerns about spending on fossil fuels and benefits for corporations."
     }
-  ],
-  "also_law": [
-    {"title": "Ukrainian Heritage Month", "bill": "S-210", "text": "Officially recognizes a month for Ukrainian heritage in Canada. Signed into law October 28."}
-  ],
-  "pm": {
-    "name": "Mark Carney",
-    "headline": "The PM is wrapping up a four-country trip in Asia and Europe",
-    "intro": "He left after the Remembrance Day ceremony in Ottawa and is due back on November 19. The trip is focused on trade: summits with leaders from Europe, Southeast Asia, French-speaking countries and the Pacific Rim.",
-    "timeline": [
-      {"when": "Nov 11", "where": "Ottawa", "what": "Remembrance Day ceremony, then left for Ireland.", "state": "done"},
-      {"when": "Next stop", "where": "Dublin, Ireland", "what": "Meeting of the European Political Community, a regular gathering of European leaders.", "state": "done"},
-      {"when": "Nov 14", "where": "Manila, Philippines", "what": "Met President Ferdinand Marcos Jr. at 10 a.m., then held a press conference. In town for the ASEAN summit, where Canada was expected to sign trade deals with the ASEAN group and with the Philippines.", "state": "done"},
-      {"when": "Nov 16", "where": "Phnom Penh, Cambodia", "what": "Summit of the Francophonie, the group of French-speaking countries. Canada hosts it in 2028.", "state": "done"},
-      {"when": "Nov 17", "where": "Shenzhen, China", "what": "One-on-one meeting with President Xi Jinping. Topics he named beforehand: agriculture, energy and financial services. He also said he would raise foreign interference in Canada.", "state": "done"},
-      {"when": "Today · Nov 18 to 19", "where": "Shenzhen, China", "what": "APEC summit, the yearly meeting of Asia-Pacific economies.", "state": "now"},
-      {"when": "Nov 19", "where": "Back to Ottawa", "what": "Returns as debate on the budget continues.", "state": "next"}
-    ],
-    "good_to_know": "A trade deal signed abroad usually isn't in effect yet. Parliament normally has to pass a law to put it into action, so it would show up later in the \"Today\" tab as a bill.",
-    "source": {"label": "See the PM's official daily itinerary", "url": "https://www.pm.gc.ca/en/news/itineraries"}
+   ],
+   "sides_note": "Listed in order of seats held. These are what each party said in the House, not checked facts.",
+   "poll": {
+    "q": "Your take: would you vote for this budget?",
+    "reveal": "**What actually happens:** the final vote hasn't happened yet. Check back here to see how it goes."
+   },
+   "source": {
+    "label": "See the official votes record",
+    "url": "https://www.ourcommons.ca/Members/en/votes/"
+   },
+   "sensitive": false,
+   "review": "approved"
   },
-  "lobbying": {
-    "month": "October 2026",
-    "headline": "Lobbying meetings jumped 66% in October, just before the budget",
-    "total": 6356,
-    "prev_label": "in September, for comparison",
-    "prev_total": 3839,
-    "topics": [["Economic development", 2405], ["Industry", 1949], ["Taxes and finance", 1628], ["Environment", 1553], ["International trade", 1416]],
-    "top_office": "The Prime Minister's Office",
-    "top_office_series": [["March", 193], ["April", 224], ["May", 241], ["June", 201], ["July", 189], ["August", 177]],
-    "examples": [
-      {"who": "Airbus Canada", "with": "Met 3 senior PMO staff on Oct 14: the deputy chief of staff, a senior policy advisor, and the senior advisor on foreign, defence and security policy.", "subjects": ["Energy", "Environment", "Climate", "Economic development", "Natural resources"]}
-    ],
-    "source": {"label": "Search the Registry of Lobbyists", "url": "https://lobbycanada.gc.ca/app/secure/ocl/lrs/do/guest"}
+  {
+   "id": "c-41",
+   "kind": "vote",
+   "status": "Passed a vote",
+   "bill": "C-41",
+   "category": "Health",
+   "topics": [
+    "health",
+    "justice"
+   ],
+   "headline": "MPs back changes to medically assisted dying rules, moving the bill to committee",
+   "short_title": "Assisted dying bill passes first vote, heads to committee",
+   "what_label": "What it does",
+   "what": "It would permanently rule out medical assistance in dying when a mental illness is the only condition. It would also let people with illnesses that may later take away their ability to decide make a request in advance, in provinces that set up a system for it.",
+   "stage": {
+    "done": 2,
+    "current": true
+   },
+   "you_label": "What happens next",
+   "you": "A small group of MPs will study the bill in detail and can suggest changes. Nothing has changed in the law yet.",
+   "sides": [
+    {
+     "who": "Supporters (government)",
+     "text": "Say it adds safeguards, including independent medical assessments and the ability to withdraw consent."
+    },
+    {
+     "who": "Critics (Bloc Québécois)",
+     "text": "Doubt the bill would hold up in court as written and say it could be more restrictive than current rules."
+    }
+   ],
+   "sides_note": "Before the vote, the government used [[time-allocation|time allocation]] to limit how long debate could run.",
+   "poll": {
+    "q": "Your take: should this bill move forward?",
+    "reveal": "**What actually happened:** MPs voted to move it forward. It's now in committee."
+   },
+   "source": {
+    "label": "Read the bill on LEGISinfo",
+    "url": "https://www.parl.ca/legisinfo/en/bill/45-1/C-41"
+   },
+   "sensitive": true,
+   "review": "approved"
   },
-  "extras_for_email": [
-    {"topics": ["world", "economy"], "tag": "The PM", "title": "PM meets Xi Jinping at APEC in China", "text": "Back in Ottawa Nov 19 after a four-country trade trip."},
-    {"topics": ["transparency"], "tag": "Lobbying", "title": "Lobbying meetings jumped 66% in October", "text": "The Prime Minister's Office is the most-lobbied part of government."}
+  {
+   "id": "c-38",
+   "kind": "law",
+   "status": "Became law",
+   "bill": "C-38",
+   "category": "Cost of living",
+   "topics": [
+    "cost",
+    "climate"
+   ],
+   "headline": "The federal gas tax break is extended into 2027",
+   "short_title": "Gas tax break is law until early 2027",
+   "what_label": "What it does",
+   "what": "The federal excise tax on fuel stays off until the end of January 2027. It comes back at half rate in February and March, then returns in full in April 2027.",
+   "stage": {
+    "done": 6,
+    "current": false
+   },
+   "you_label": "What it means for you",
+   "you": "You keep paying less federal tax at the pump through winter. Expect prices to step up in February and again in April 2027.",
+   "sides": [
+    {
+     "who": "Supporters (government)",
+     "text": "Call it temporary relief while global fuel prices are high."
+    },
+    {
+     "who": "Critics (Conservatives)",
+     "text": "Call it a half-measure, since the tax comes back in 2027, and want it cut for good."
+    }
+   ],
+   "sides_note": null,
+   "poll": {
+    "q": "Your take: good idea?",
+    "reveal": "**What actually happened:** it passed both the House and Senate and became law in late October."
+   },
+   "source": {
+    "label": "Read the bill on LEGISinfo",
+    "url": "https://www.parl.ca/legisinfo/en/bill/45-1/C-38"
+   },
+   "sensitive": false,
+   "review": "approved"
+  },
+  {
+   "id": "c-268",
+   "kind": "debate",
+   "status": "Being debated",
+   "bill": "C-268",
+   "category": "Phones and internet",
+   "topics": [
+    "tech"
+   ],
+   "headline": "A bill to make cell coverage maps more accurate nears its final House vote",
+   "short_title": "Cell coverage map bill nears final House vote",
+   "what_label": "What it does",
+   "what": "It would require checks on the mobile coverage data that providers report, plus regular reviews of how Canada manages wireless airwaves.",
+   "stage": {
+    "done": 3,
+    "current": true
+   },
+   "you_label": "Why it matters",
+   "you": "Coverage maps decide where money goes to fix weak service, so accurate data matters most in rural areas.",
+   "sides": [
+    {
+     "who": "All parties",
+     "text": "MPs who spoke in debate supported it. No party has come out against it."
+    }
+   ],
+   "sides_note": "This is a [[pmb|private member's bill]], not a government bill.",
+   "poll": {
+    "q": "Your take: should it pass?",
+    "reveal": "**What actually happens:** the final House vote is still to come. With support from every party, it's likely to pass."
+   },
+   "source": {
+    "label": "Read the bill on LEGISinfo",
+    "url": "https://www.parl.ca/legisinfo/en/bill/45-1/C-268"
+   },
+   "sensitive": false,
+   "review": "approved"
+  }
+ ],
+ "also_law": [
+  {
+   "title": "Ukrainian Heritage Month",
+   "bill": "S-210",
+   "text": "Officially recognizes a month for Ukrainian heritage in Canada. Signed into law October 28."
+  }
+ ],
+ "pm": {
+  "name": "Mark Carney",
+  "headline": "The PM's public schedule, from his official itinerary",
+  "intro": "This is copied from the itinerary the Prime Minister's Office posts each day. Times are local to where he is.",
+  "timeline": [
+   {
+    "when": "Nov 18 · 1:30 p.m.",
+    "where": "Shenzhen, People’s Republic of China",
+    "what": "The Prime Minister will deliver remarks at the 33rd Asia-Pacific Economic Cooperation (APEC) CEO Summit.",
+    "state": "done"
+   },
+   {
+    "when": "Nov 18 · 3:05 p.m.",
+    "where": "Shenzhen, People’s Republic of China",
+    "what": "The Prime Minister will hold a media availability.",
+    "state": "done"
+   },
+   {
+    "when": "Nov 18 · 6:30 p.m.",
+    "where": "Shenzhen, People’s Republic of China",
+    "what": "The Prime Minister will arrive at the APEC Economic Leaders’ dinner.",
+    "state": "done"
+   },
+   {
+    "when": "Nov 18 · 7:00 p.m.",
+    "where": "Shenzhen, People’s Republic of China",
+    "what": "The Prime Minister will attend the APEC Economic Leaders’ dinner.",
+    "state": "done"
+   },
+   {
+    "when": "Nov 19 · 8:55 a.m.",
+    "where": "Shenzhen, People’s Republic of China",
+    "what": "The Prime Minister will arrive at the 33rd Asia-Pacific Economic Cooperation (APEC) Economic Leaders’ Summit.",
+    "state": "done"
+   },
+   {
+    "when": "Nov 19 · 9:30 a.m.",
+    "where": "Shenzhen, People’s Republic of China",
+    "what": "The Prime Minister will participate in the APEC family photo.",
+    "state": "done"
+   },
+   {
+    "when": "Nov 19 · 9:45 a.m.",
+    "where": "Shenzhen, People’s Republic of China",
+    "what": "The Prime Minister will participate in the 33rd APEC Economic Leaders’ Meeting.",
+    "state": "done"
+   },
+   {
+    "when": "Nov 19 · 12:35 p.m.",
+    "where": "Shenzhen, People’s Republic of China",
+    "what": "The Prime Minister will meet with the Prime Minister of Australia, Anthony Albanese, the Prime Minister of New Zealand, Christopher Luxon, and the Prime Minister of Singapore, Lawrence Wong.",
+    "state": "done"
+   },
+   {
+    "when": "Nov 19 · 3:00 p.m.",
+    "where": "Shenzhen, People’s Republic of China",
+    "what": "The Prime Minister will depart for Ottawa, Canada.",
+    "state": "done"
+   },
+   {
+    "when": "Nov 19 · 8:45 p.m.",
+    "where": "National Capital Region, Canada",
+    "what": "The Prime Minister will arrive in Ottawa, Canada.",
+    "state": "done"
+   },
+   {
+    "when": "Nov 21 · 9:10 p.m.",
+    "where": "National Capital Region, Canada",
+    "what": "The Prime Minister will attend the annual Parliamentary Press Gallery Dinner.",
+    "state": "done"
+   }
+  ],
+  "good_to_know": null,
+  "source": {
+   "label": "See the PM's official daily itinerary",
+   "url": "https://www.pm.gc.ca/en/news/media-advisories/2026/11/21/update-saturday-november-21-2026"
+  },
+  "updated_from": [
+   "2026-11-18",
+   "2026-11-19",
+   "2026-11-21"
   ]
+ },
+ "lobbying": {
+  "month": "October 2026",
+  "headline": "Lobbying meetings jumped 66% in October, just before the budget",
+  "total": 6356,
+  "prev_label": "in September, for comparison",
+  "prev_total": 3839,
+  "topics": [
+   [
+    "Economic development",
+    2405
+   ],
+   [
+    "Industry",
+    1949
+   ],
+   [
+    "Taxes and finance",
+    1628
+   ],
+   [
+    "Environment",
+    1553
+   ],
+   [
+    "International trade",
+    1416
+   ]
+  ],
+  "top_office": "The Prime Minister's Office",
+  "top_office_series": [
+   [
+    "March",
+    193
+   ],
+   [
+    "April",
+    224
+   ],
+   [
+    "May",
+    241
+   ],
+   [
+    "June",
+    201
+   ],
+   [
+    "July",
+    189
+   ],
+   [
+    "August",
+    177
+   ]
+  ],
+  "examples": [
+   {
+    "who": "Airbus Canada",
+    "with": "Met 3 senior PMO staff on Oct 14: the deputy chief of staff, a senior policy advisor, and the senior advisor on foreign, defence and security policy.",
+    "subjects": [
+     "Energy",
+     "Environment",
+     "Climate",
+     "Economic development",
+     "Natural resources"
+    ]
+   }
+  ],
+  "source": {
+   "label": "Search the Registry of Lobbyists",
+   "url": "https://lobbycanada.gc.ca/app/secure/ocl/lrs/do/guest"
+  }
+ },
+ "extras_for_email": [
+  {
+   "topics": [
+    "world",
+    "economy"
+   ],
+   "tag": "The PM",
+   "title": "PM meets Xi Jinping at APEC in China",
+   "text": "Back in Ottawa Nov 19 after a four-country trade trip."
+  },
+  {
+   "topics": [
+    "transparency"
+   ],
+   "tag": "Lobbying",
+   "title": "Lobbying meetings jumped 66% in October",
+   "text": "The Prime Minister's Office is the most-lobbied part of government."
+  }
+ ]
 }
