@@ -255,17 +255,30 @@
     "where": "National Capital Region, Canada",
     "what": "The Prime Minister will attend the annual Parliamentary Press Gallery Dinner.",
     "state": "done"
+   },
+   {
+    "when": "Nov 24 · 10:30 a.m.",
+    "where": "National Capital Region, Canada",
+    "what": "The Prime Minister will chair the Cabinet meeting.",
+    "state": "next"
+   },
+   {
+    "when": "Nov 24 · 7:30 p.m.",
+    "where": "National Capital Region, Canada",
+    "what": "The Prime Minister will attend and deliver remarks at the 2026 Equal Voice Gala.",
+    "state": "next"
    }
   ],
   "good_to_know": null,
   "source": {
    "label": "See the PM's official daily itinerary",
-   "url": "https://www.pm.gc.ca/en/news/media-advisories/2026/11/21/update-saturday-november-21-2026"
+   "url": "https://www.pm.gc.ca/en/news/media-advisories/2026/11/23/tuesday-november-24-2026"
   },
   "updated_from": [
    "2026-11-18",
    "2026-11-19",
-   "2026-11-21"
+   "2026-11-21",
+   "2026-11-24"
   ]
  },
  "lobbying": {
