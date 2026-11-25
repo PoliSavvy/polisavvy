@@ -236,25 +236,25 @@
     "when": "Nov 24 · 10:30 a.m.",
     "where": "National Capital Region, Canada",
     "what": "The Prime Minister will chair the Cabinet meeting.",
-    "state": "now"
+    "state": "done"
    },
    {
     "when": "Nov 24 · 7:30 p.m.",
     "where": "National Capital Region, Canada",
     "what": "The Prime Minister will attend and deliver remarks at the 2026 Equal Voice Gala.",
-    "state": "now"
+    "state": "done"
    },
    {
     "when": "Nov 25 · 10:00 a.m.",
     "where": "National Capital Region, Canada",
     "what": "The Prime Minister will attend the National Caucus meeting.",
-    "state": "next"
+    "state": "now"
    },
    {
     "when": "Nov 25 · 2:15 p.m.",
     "where": "National Capital Region, Canada",
     "what": "The Prime Minister will attend Question Period.",
-    "state": "next"
+    "state": "now"
    }
   ],
   "good_to_know": null,
