@@ -212,31 +212,31 @@
     "when": "Nov 25 · 10:00 a.m.",
     "where": "National Capital Region, Canada",
     "what": "The Prime Minister will attend the National Caucus meeting.",
-    "state": "now"
+    "state": "done"
    },
    {
     "when": "Nov 25 · 2:15 p.m.",
     "where": "National Capital Region, Canada",
     "what": "The Prime Minister will attend Question Period.",
-    "state": "now"
+    "state": "done"
    },
    {
     "when": "Nov 26 · 3:00 p.m.",
     "where": "Regina, Saskatchewan",
     "what": "The Prime Minister will meet with the Premier of Saskatchewan, Scott Moe.",
-    "state": "next"
+    "state": "now"
    },
    {
     "when": "Nov 26 · 6:30 p.m.",
     "where": "Whitehorse, Yukon",
     "what": "The Prime Minister will meet with the Premier of Yukon, Currie Dixon.",
-    "state": "next"
+    "state": "now"
    },
    {
     "when": "Nov 26 · 7:15 p.m.",
     "where": "Whitehorse, Yukon",
     "what": "The Prime Minister will meet with First Nations leadership.",
-    "state": "next"
+    "state": "now"
    }
   ],
   "good_to_know": null,
