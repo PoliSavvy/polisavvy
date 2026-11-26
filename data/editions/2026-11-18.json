@@ -191,42 +191,6 @@
   "intro": "This is copied from the itinerary the Prime Minister's Office posts each day. Times are local to where he is.",
   "timeline": [
    {
-    "when": "Nov 19 · 8:55 a.m.",
-    "where": "Shenzhen, People’s Republic of China",
-    "what": "The Prime Minister will arrive at the 33rd Asia-Pacific Economic Cooperation (APEC) Economic Leaders’ Summit.",
-    "state": "done"
-   },
-   {
-    "when": "Nov 19 · 9:30 a.m.",
-    "where": "Shenzhen, People’s Republic of China",
-    "what": "The Prime Minister will participate in the APEC family photo.",
-    "state": "done"
-   },
-   {
-    "when": "Nov 19 · 9:45 a.m.",
-    "where": "Shenzhen, People’s Republic of China",
-    "what": "The Prime Minister will participate in the 33rd APEC Economic Leaders’ Meeting.",
-    "state": "done"
-   },
-   {
-    "when": "Nov 19 · 12:35 p.m.",
-    "where": "Shenzhen, People’s Republic of China",
-    "what": "The Prime Minister will meet with the Prime Minister of Australia, Anthony Albanese, the Prime Minister of New Zealand, Christopher Luxon, and the Prime Minister of Singapore, Lawrence Wong.",
-    "state": "done"
-   },
-   {
-    "when": "Nov 19 · 3:00 p.m.",
-    "where": "Shenzhen, People’s Republic of China",
-    "what": "The Prime Minister will depart for Ottawa, Canada.",
-    "state": "done"
-   },
-   {
-    "when": "Nov 19 · 8:45 p.m.",
-    "where": "National Capital Region, Canada",
-    "what": "The Prime Minister will arrive in Ottawa, Canada.",
-    "state": "done"
-   },
-   {
     "when": "Nov 21 · 9:10 p.m.",
     "where": "National Capital Region, Canada",
     "what": "The Prime Minister will attend the annual Parliamentary Press Gallery Dinner.",
@@ -255,18 +219,36 @@
     "where": "National Capital Region, Canada",
     "what": "The Prime Minister will attend Question Period.",
     "state": "now"
+   },
+   {
+    "when": "Nov 26 · 3:00 p.m.",
+    "where": "Regina, Saskatchewan",
+    "what": "The Prime Minister will meet with the Premier of Saskatchewan, Scott Moe.",
+    "state": "next"
+   },
+   {
+    "when": "Nov 26 · 6:30 p.m.",
+    "where": "Whitehorse, Yukon",
+    "what": "The Prime Minister will meet with the Premier of Yukon, Currie Dixon.",
+    "state": "next"
+   },
+   {
+    "when": "Nov 26 · 7:15 p.m.",
+    "where": "Whitehorse, Yukon",
+    "what": "The Prime Minister will meet with First Nations leadership.",
+    "state": "next"
    }
   ],
   "good_to_know": null,
   "source": {
    "label": "See the PM's official daily itinerary",
-   "url": "https://www.pm.gc.ca/en/news/media-advisories/2026/11/24/wednesday-november-25-2026"
+   "url": "https://www.pm.gc.ca/en/news/media-advisories/2026/11/25/thursday-november-26-2026"
   },
   "updated_from": [
-   "2026-11-19",
    "2026-11-21",
    "2026-11-24",
-   "2026-11-25"
+   "2026-11-25",
+   "2026-11-26"
   ]
  },
  "lobbying": {
