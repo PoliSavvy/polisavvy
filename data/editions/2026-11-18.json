@@ -191,12 +191,6 @@
   "intro": "This is copied from the itinerary the Prime Minister's Office posts each day. Times are local to where he is.",
   "timeline": [
    {
-    "when": "Nov 21 · 9:10 p.m.",
-    "where": "National Capital Region, Canada",
-    "what": "The Prime Minister will attend the annual Parliamentary Press Gallery Dinner.",
-    "state": "done"
-   },
-   {
     "when": "Nov 24 · 10:30 a.m.",
     "where": "National Capital Region, Canada",
     "what": "The Prime Minister will chair the Cabinet meeting.",
@@ -237,18 +231,24 @@
     "where": "Whitehorse, Yukon",
     "what": "The Prime Minister will meet with First Nations leadership.",
     "state": "now"
+   },
+   {
+    "when": "Nov 27 · 1:00 p.m.",
+    "where": "Yellowknife, Northwest Territories",
+    "what": "The Prime Minister will announce a major new initiative that will connect and transform Canada’s North. He will be joined by the Premier of the Northwest Territories, R.J. Simpson.",
+    "state": "next"
    }
   ],
   "good_to_know": null,
   "source": {
    "label": "See the PM's official daily itinerary",
-   "url": "https://www.pm.gc.ca/en/news/media-advisories/2026/11/25/thursday-november-26-2026"
+   "url": "https://www.pm.gc.ca/en/news/media-advisories/2026/11/26/friday-november-27-2026"
   },
   "updated_from": [
-   "2026-11-21",
    "2026-11-24",
    "2026-11-25",
-   "2026-11-26"
+   "2026-11-26",
+   "2026-11-27"
   ]
  },
  "lobbying": {
