@@ -218,25 +218,25 @@
     "when": "Nov 26 · 3:00 p.m.",
     "where": "Regina, Saskatchewan",
     "what": "The Prime Minister will meet with the Premier of Saskatchewan, Scott Moe.",
-    "state": "now"
+    "state": "done"
    },
    {
     "when": "Nov 26 · 6:30 p.m.",
     "where": "Whitehorse, Yukon",
     "what": "The Prime Minister will meet with the Premier of Yukon, Currie Dixon.",
-    "state": "now"
+    "state": "done"
    },
    {
     "when": "Nov 26 · 7:15 p.m.",
     "where": "Whitehorse, Yukon",
     "what": "The Prime Minister will meet with First Nations leadership.",
-    "state": "now"
+    "state": "done"
    },
    {
     "when": "Nov 27 · 1:00 p.m.",
     "where": "Yellowknife, Northwest Territories",
     "what": "The Prime Minister will announce a major new initiative that will connect and transform Canada’s North. He will be joined by the Premier of the Northwest Territories, R.J. Simpson.",
-    "state": "next"
+    "state": "now"
    }
   ],
   "good_to_know": null,
